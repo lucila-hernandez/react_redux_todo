@@ -1,16 +1,21 @@
 import { configureStore } from "@reduxjs/toolkit";
 import todoReducer from "./todoSlice";
+import filtersReducer from "./filtersSlice";
 import { loadState, saveState } from "./localStorage";
 
-const preloadedState = loadState() || { todos: [] }; 
+const preloadedState = loadState() || { todos: [] };
 
 export const store = configureStore({
   reducer: {
     todos: todoReducer,
+    filters: filtersReducer,
   },
   preloadedState, 
 });
 
 store.subscribe(() => {
-  saveState(store.getState().todos); // Still saving only the todos array
+  saveState({
+    todos: store.getState().todos,
+    filters: store.getState().filters,
+  });
 });
